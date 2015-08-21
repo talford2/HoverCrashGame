@@ -24,26 +24,26 @@ public class Player : MonoBehaviour
 		currentSpeed += Input.GetAxis("Vertical") * ForwardThrust * Time.deltaTime;
 		var direction = transform.forward;
 
-		Ray r = new Ray(transform.position, Vector3.forward);
+		Ray r = new Ray(transform.position, direction);
 		RaycastHit hit;
+
+		Debug.DrawRay(transform.position, direction * 15, Color.red);
 
 		var distCheck = currentSpeed * 2.0f;
 
+		// forward cast
 		if (Physics.Raycast(r, out hit, distCheck))
 		{
 			Debug.Log("hit! " + hit.normal + "/" + transform.forward);
-			//currentSpeed = 0;
-
-
-			//hit.normal 
 
 			currentSpeed -= Time.deltaTime * 100;
 			direction = Vector3.Reflect(transform.forward, hit.normal).normalized;
 
-			//direction = hit.normal;
-
+			// hit effect
 			Instantiate(HitEffect, hit.point, Quaternion.identity);
 		}
+		// down cast
+		//if (Physics.Raycast(new Ray(transform.position, Vector3.)))
 
 		transform.forward = direction;
 
