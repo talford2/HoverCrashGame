@@ -22,13 +22,11 @@ public class Player : MonoBehaviour
 	void Update()
 	{
 		currentSpeed += Input.GetAxis("Vertical") * ForwardThrust * Time.deltaTime;
-		var direction = transform.forward;
+		//var direction = transform.forward;
 
-		Ray r = new Ray(transform.position, direction);
+		Ray r = new Ray(transform.position, transform.forward);
 		RaycastHit hit;
-
-
-
+		
 		var distCheck = currentSpeed * 2.0f;
 
 		// forward cast
@@ -37,11 +35,6 @@ public class Player : MonoBehaviour
 			Debug.Log("hit! " + hit.normal + "/" + transform.forward);
 
 			currentSpeed *= 0.2f;
-			//if (currentSpeed < 0)
-			//{
-			//	currentSpeed = 0;
-			//}
-			//direction = Vector3.Reflect(transform.forward, hit.normal).normalized;
 
 			transform.forward = Vector3.Reflect(transform.forward, hit.normal).normalized;
 
@@ -50,11 +43,10 @@ public class Player : MonoBehaviour
 		}
 		// down cast
 		//if (Physics.Raycast(new Ray(transform.position, Vector3.)))
-
-		//transform.forward = direction;
+		
 		Debug.DrawRay(transform.position, transform.forward * 15, Color.red);
 
-		transform.Translate(currentSpeed * transform.forward);
+		transform.Translate(currentSpeed * transform.forward, Space.World);
 	}
 
 	void FixedUpdate()
