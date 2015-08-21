@@ -26,8 +26,8 @@ public class Player : MonoBehaviour
 
 		Ray r = new Ray(transform.position, direction);
 		RaycastHit hit;
-		
-		Debug.DrawRay(transform.position, direction * 15, Color.red);
+
+
 
 		var distCheck = currentSpeed * 2.0f;
 
@@ -36,12 +36,14 @@ public class Player : MonoBehaviour
 		{
 			Debug.Log("hit! " + hit.normal + "/" + transform.forward);
 
-			currentSpeed -= Time.deltaTime * 100;
-			if (currentSpeed < 0)
-			{
-				currentSpeed = 0;
-			}
-			direction = Vector3.Reflect(transform.forward, hit.normal).normalized;
+			currentSpeed *= 0.2f;
+			//if (currentSpeed < 0)
+			//{
+			//	currentSpeed = 0;
+			//}
+			//direction = Vector3.Reflect(transform.forward, hit.normal).normalized;
+
+			transform.forward = Vector3.Reflect(transform.forward, hit.normal).normalized;
 
 			// hit effect
 			Instantiate(HitEffect, hit.point, Quaternion.identity);
@@ -49,8 +51,9 @@ public class Player : MonoBehaviour
 		// down cast
 		//if (Physics.Raycast(new Ray(transform.position, Vector3.)))
 
-		transform.forward = direction;
-		
+		//transform.forward = direction;
+		Debug.DrawRay(transform.position, transform.forward * 15, Color.red);
+
 		transform.Translate(currentSpeed * transform.forward);
 	}
 
