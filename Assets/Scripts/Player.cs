@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 
 	public float ForwardDrag = 0.5f;
 
-	public float TurnSpeed = 1f;
+	public float SteeringSpeed = 1f;
 
 	private float currentSpeed = 0;
 
@@ -21,10 +21,16 @@ public class Player : MonoBehaviour
 
 	void Update()
 	{
-		currentSpeed += Input.GetAxis("Vertical") * ForwardThrust * Time.deltaTime;
+		//currentSpeed += Input.GetAxis("Vertical") * ForwardThrust * Time.deltaTime;
+	    currentSpeed += 10f*Input.GetAxis("Mouse ScrollWheel")*ForwardThrust*Time.deltaTime;
+
+	    var upDown = -Input.GetAxis("Vertical")*SteeringSpeed*Time.deltaTime;
+        var leftRight = Input.GetAxis("Horizontal") * SteeringSpeed*Time.deltaTime;
+	    transform.forward += transform.right*leftRight + transform.up*upDown;
+
 		//var direction = transform.forward;
 
-		Ray r = new Ray(transform.position, transform.forward);
+		var r = new Ray(transform.position, transform.forward);
 		RaycastHit hit;
 		
 		var distCheck = currentSpeed * 2.0f;
