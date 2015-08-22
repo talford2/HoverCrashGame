@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class Player : MonoBehaviour
 
 	public GameObject HitEffect;
 
+	public List<Transform> CastTransforms;
+
 	void Start()
 	{
 	}
@@ -22,35 +25,38 @@ public class Player : MonoBehaviour
 	void Update()
 	{
 		//currentSpeed += Input.GetAxis("Vertical") * ForwardThrust * Time.deltaTime;
-	    currentSpeed += 10f*Input.GetAxis("Mouse ScrollWheel")*ForwardThrust*Time.deltaTime;
+		currentSpeed += 10f * Input.GetAxis("Mouse ScrollWheel") * ForwardThrust * Time.deltaTime;
 
-	    var upDown = -Input.GetAxis("Vertical")*SteeringSpeed*Time.deltaTime;
-        var leftRight = Input.GetAxis("Horizontal") * SteeringSpeed*Time.deltaTime;
-	    transform.forward += transform.right*leftRight + transform.up*upDown;
+		var upDown = -Input.GetAxis("Vertical") * SteeringSpeed * Time.deltaTime;
+		var leftRight = Input.GetAxis("Horizontal") * SteeringSpeed * Time.deltaTime;
+		transform.forward += transform.right * leftRight + transform.up * upDown;
 
 		//var direction = transform.forward;
 
-		var r = new Ray(transform.position, transform.forward);
-		RaycastHit hit;
-		
-		var distCheck = currentSpeed * 2.0f;
-
-		// forward cast
-		if (Physics.Raycast(r, out hit, distCheck))
+		foreach (var trans in CastTransforms)
 		{
-			Debug.Log("hit! " + hit.normal + "/" + transform.forward);
+			var r = new Ray(trans.position, trans.forward);
+			RaycastHit hit;
 
-			currentSpeed *= 0.2f;
+			var distCheck = currentSpeed * 2.0f;
 
-			transform.forward = Vector3.Reflect(transform.forward, hit.normal).normalized;
+			// forward cast
+			if (Physics.Raycast(r, out hit, distCheck))
+			{
+				Debug.Log("hit! " + hit.normal + "/" + transform.forward);
 
-			// hit effect
-			Instantiate(HitEffect, hit.point, Quaternion.identity);
+				currentSpeed *= 0.2f;
+
+				transform.forward = Vector3.Reflect(trans.forward, hit.normal).normalized;
+
+				// hit effect
+				Instantiate(HitEffect, hit.point, Quaternion.identity);
+			}
+			// down cast
+			//if (Physics.Raycast(new Ray(transform.position, Vector3.)))
+
+			Debug.DrawRay(trans.position, trans.forward * 15, Color.red);
 		}
-		// down cast
-		//if (Physics.Raycast(new Ray(transform.position, Vector3.)))
-		
-		Debug.DrawRay(transform.position, transform.forward * 15, Color.red);
 
 		transform.Translate(currentSpeed * transform.forward, Space.World);
 	}
