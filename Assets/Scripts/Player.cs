@@ -25,7 +25,12 @@ public class Player : MonoBehaviour
 	void Update()
 	{
 		//currentSpeed += Input.GetAxis("Vertical") * ForwardThrust * Time.deltaTime;
-		currentSpeed += 10f * Input.GetAxis("Mouse ScrollWheel") * ForwardThrust * Time.deltaTime;
+		//currentSpeed += 10f * Input.GetAxis("Mouse ScrollWheel") * ForwardThrust * Time.deltaTime;
+
+		if (Input.GetKey(KeyCode.LeftShift))
+		{
+			currentSpeed += ForwardThrust * Time.deltaTime;
+		}
 
 		var upDown = -Input.GetAxis("Vertical") * SteeringSpeed * Time.deltaTime;
 		var leftRight = Input.GetAxis("Horizontal") * SteeringSpeed * Time.deltaTime;
